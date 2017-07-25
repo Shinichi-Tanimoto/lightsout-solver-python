@@ -84,10 +84,9 @@ class F2MatrixAnalyzer:
             return None
 
     def __prod_vec(self, f2_vector):
-        result = []
-        for i in self.__size:
-            result[i] = f2.F2(0)
-            for k in self.__size:
+        result = [ f2.F2(0) for i in range(self.__size) ]
+        for i in range(self.__size):
+            for k in range(self.__size):
                 result[i] += self.__right_cells[i][k] * f2_vector[k]
         return result
 
@@ -98,23 +97,20 @@ class F2MatrixAnalyzer:
             return False
 
         f2_vector = [f2.F2(i) for i in array]
-
-        """ ここはしっかり計算する """
-        result = self.__right_cells * array;
+        f2_vector2 = self.__prod_vec(f2_vector);
         for i in self.__unsolvables:
-            if result[i] == f2.F2(1):
+            if f2_vector2[i] == f2.F2(1):
                 return False
         return True
-
 
     def get_kernel_vectors(self):
         if not self.__is_analized:
             return None
 
 if __name__ == '__main__':
-    analyzer = F2MatrixAnalyzer([1, 1, 1, 1, 0, 0, 1, 0, 1], 3)
+    analyzer = F2MatrixAnalyzer([1, 1, 1, 1, 0, 1, 1, 0, 1], 3)
     print analyzer
     print analyzer.analyze()
     print analyzer
     print analyzer.has_inverse()
-    print analyzer.get_inverse()
+    print analyzer.in_image([0, 0, 1])
