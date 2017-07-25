@@ -41,14 +41,13 @@ class F2:
         return F2(value)
 
     def __str__(self):
-        return "[%d]" % self.__value
+        return str(self.__value)
 
     def __eq__(self, other):
         if not isinstance(other, F2):
             return False
         else:
             return self.__value == other.__value
-
 
 if __name__ == '__main__':
     print F2(1) + F2(0)
