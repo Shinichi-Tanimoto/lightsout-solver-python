@@ -103,9 +103,54 @@ class F2MatrixAnalyzer:
                 return False
         return True
 
-    def get_kernel_vectors(self):
+    def get_coimage_list(self, array):
         if not self.__is_analized:
-            return None
+            return False
+        elif len(array) != self.__size:
+            return False
+
+        f2_vector = [f2.F2(i) for i in array]
+        f2_vector2 = self.__prod_vec(f2_vector);
+        for i in self.__unsolvables:
+            if f2_vector2[i] == f2.F2(1):
+                return []
+
+        sets = self.__get_kernel_vectors()
+        for i in range(len(sets)):
+            sets[i] = sets[i] + f2_vector2
+        return sets
+
+
+    def __get_kernel_vectors(self):
+        if len(self.__unsolvables) == 0:
+            return [[f2.F2(0) for i in range(self.__size)]]
+
+        kernel_base_vectors = []
+        """ 基底ベクトルの計算 """
+        for i in self.__unsolvables:
+            v = [f2.F2(0) for i in range(self.__size)]
+            for j in range(0, i - 1):
+                if self.__left_cells[j][i] == f2.F2(1):
+                    v[j] = f2.F2(1)
+            v[i] = f2.F2(1)
+            kernel_base_vectors.append(v)
+
+        """ 基底ベクトルからの計算 """
+        sets = [[f2.F2(0) for i in range(self.__size)]]
+        for v in kernel_base_vectors:
+            sets_temp = []
+            for s in sets:
+                sets_temp.append(s + v)
+                sets_temp.append(s)
+            sets = sets_temp
+        return sets
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     analyzer = F2MatrixAnalyzer([1, 1, 1, 1, 0, 1, 1, 0, 1], 3)
