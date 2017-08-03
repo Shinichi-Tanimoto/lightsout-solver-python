@@ -38,6 +38,5 @@ def solve_lightsout(lights, size):
     print analyzer.get_coimage_list(lights)
 
 
-
 if __name__ == '__main__':
     solve_lightsout([1,0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1], 4)
